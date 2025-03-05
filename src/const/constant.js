@@ -3,3 +3,9 @@ export const status = {
     DELETED: "deleted",
     DONE: "done"
 };
+
+export const userStatus = {
+    ACTIVE : "active",
+    DELETED : "inactive",
+    PENDING : "pending"
+};   

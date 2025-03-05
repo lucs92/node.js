@@ -8,6 +8,8 @@ import updateController from '../controllers/updateController.js';
 import deleteSoftController from '../controllers/deleteSoftController.js';
 import deleteValidator from '../validators/deleteValidator.js';
 import getValidator from '../validators/getValidator.js';
+import registerUserValidator from '../validators/registerUserValidator.js';
+import registerController from '../controllers/registerController.js';
 
 const setup = (app) => {
 
@@ -16,7 +18,8 @@ const setup = (app) => {
     app.post("/", addValidator, addController);
     app.patch("/:id", updateValidator, updateController);
     // app.delete("/:id", deleteValidator, deleteController);
-    app.delete("/soft/:id", deleteValidator, deleteSoftController);
+    app.delete("/soft/:id", deleteValidator , deleteSoftController);
+    app.post("/user",registerUserValidator , registerController);
 
     app.use((error, req, res, next) => {
         if (error && error.error && error.error.isJoi) {

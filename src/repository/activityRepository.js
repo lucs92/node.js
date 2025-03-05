@@ -26,8 +26,8 @@ const getActivity = async (id) => {
 };
 
 const updateActivity = async (id, data) => {
-    const activity = await activitySchema.findOneAndUpdate(
-        {_id: id}, data, {upsert: false, new: true}).catch(error => {
+    const activity = await activitySchema.findByIdAndUpdate(
+        id, data, {upsert: false, new: true}).catch(error => {
         console.error(`Error: ${error.message}`);
         return null;
     });

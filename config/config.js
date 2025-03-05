@@ -11,7 +11,16 @@ const config = {
         uri : `mongodb+srv://${dbUser}:${dbPassword}@todolist.e8z0m.mongodb.net/?retryWrites=true&w=majority&appName=${dbName}`,
         //port: 27017,
         name: "todolist"
-    }
+    },
+    emailConfig: {
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: "lucasannagst@gmail.com",
+            pass: "testPassword"
+        }
+    },
 };
 
 export default config;
