@@ -4,49 +4,43 @@ import MongoInternalException from '../exceptions/MongoInternalException.js';
 import NotFoundException from '../exceptions/NotFoundException.js';
 
 const add = async (data)=> {
-       const activity  = await activitySchema.create(data)
-       .catch(error => {
-        console.error(`Error: ${error.message}`);
-       });
+    const activity  = await activitySchema.create(data)
+    .catch(error => {
+        throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.add`);
+    });
        // return activity.toJSON({flattenObjectIds: true, });
        return new Activity(activity);
 };
 
-const getActivities = async () => {
-      const activities = await activitySchema.find()
-      .catch(error => {
-        console.error(`Error: ${error.message}`);
-        return null;
-      });
+const getActivities = async (userId) => {
+    const activities = await activitySchema.find({userId})
+    .catch(error => {
+        throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.getActivities`);
+    });
+        if(activities.length === 0) {
+        throw new NotFoundException(`Activity with id ${id} not found`, `activityRepository.getActivities`);
+    };
         return activities.map((activity) => new Activity(activity));
 };
 
-const getActivity = async (id) => {
-    const activity = await activitySchema.findById(id)
+const getActivity = async (activityId, userId) => {
+    const activity = await activitySchema.findOne({_id: activityId, userId: userId })
     .catch(error => {
         throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.getActivity`);
     });
     if(!activity) {
-        throw new NotFoundException(`Activity with id ${id} not found`, `activityRepository.getActivity`);
+        throw new NotFoundException(`Activity with id ${activityId} not found`, `activityRepository.getActivity`);
     };
     return new Activity(activity);
 };
 
-const updateActivity = async (id, data) => {
+const updateActivity = async (activityId, data, userId) => {
     const activity = await activitySchema.findByIdAndUpdate(
-        id, data, {upsert: false, new: true})
-        .catch(error => {
-            throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.updateActivity`);
-        });
+    {_id: activityId, userId: userId}, data, {upsert: false, new: true})
+    .catch(error => {
+        throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.updateActivity`);
+    });
         return activity ? new Activity(activity) : null;
 };
 
-// const deleteActivity = async (id) => {
-//     await activitySchema.findByIdAndDelete(
-//         {_id: id}).catch(error => {
-//             console.error(`Error: ${error.message}`);
-//             return null;
-//     });
-// };
-
-export default {add, getActivities, getActivity, updateActivity/*, deleteActivity*/};
+export default {add, getActivities, getActivity, updateActivity};

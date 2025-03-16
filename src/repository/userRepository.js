@@ -19,7 +19,7 @@ const activate = async(id) => {
 };
 
 const getByEmail = async(email) => {
-    return await userSchema.findOne({email: email}).catch(error => {
+    return await userSchema.findOne({email}).catch(error => {
        throw new MongoInternalException(error.message, "userRepository.getByEmail");
     }); 
 };

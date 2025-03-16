@@ -17,12 +17,15 @@ const config = {
         //name: dbName
     },
     emailConfig: {
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-            user: emailUser,
-            pass: emailPassword
+        type: "basic",
+        basic: {
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: emailUser,
+                pass: emailPassword
+            }
         }
     },
     accessTokenExpiration: 3600,
