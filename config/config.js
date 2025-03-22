@@ -12,17 +12,20 @@ const config = {
     host : "localhost",
     port : 8000,
     db: {
-        uri : `mongodb+srv://${dbUser}:${dbPassword}@todolist.e8z0m.mongodb.net/?retryWrites=true&w=majority&appName=${dbName}`,
+        url : `mongodb+srv://${dbUser}:${dbPassword}@todolist.e8z0m.mongodb.net/?retryWrites=true&w=majority&appName=${dbName}`,
         //port: 27017,
         //name: dbName
     },
     emailConfig: {
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-            user: emailUser,
-            pass: emailPassword
+        type: "basic",
+        basic: {
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: emailUser,
+                pass: emailPassword
+            }
         }
     },
     accessTokenExpiration: 3600,

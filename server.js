@@ -1,13 +1,13 @@
 import config from './config/config.js';
 import express, { json } from "express";
-const app = express();
 import setup from './src/routes/activityRoutes.js';
 import connectDB from './src/gatawey/db.js';
 
+const app = express();
 app.use(json());
 
 try {
-    await connectDB(config.db.uri);
+    await connectDB(config.db.url);
     setup(app);
     //const server = http.createServer(requestListener);
     app.listen(config.port, config.host, () => {

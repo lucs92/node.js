@@ -1,13 +1,12 @@
 import userService from "../services/userService.js";
-import userNormalizer from "../normalizer/userNormalizer.js"
+import UserNormalizer from "../Normalizer/UserNormalizer.js"
 
 const login = async (req, res) => {
     const {email, password} = req.body;
+   
     try{
-        const loginResponse = await userService.login(email, password);
-        const normalizer = userNormalizer.get(loginResponse.user);
-        //console.log("normalizer:", normalizer);
-        return res.status(200).json(normalizer);
+        const userLogin = await userService.login(email, password); 
+        return res.status(200).json(new UserNormalizer(userLogin).getLogin());
     }catch(error) {
        res.status(error.status || 500).json({message: error.message});
     }

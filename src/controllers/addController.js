@@ -5,7 +5,7 @@ const add = async(req, res) => {
     const activity = await activityService.addActivity(data);
     
     if(activity) {
-        res.status(201).json(activity)
+        res.status(201).json(activity.toJSON());
     } else {
         res.status(500).json({message: "Server error"});
     } 

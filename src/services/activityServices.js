@@ -7,31 +7,31 @@ const addActivity = async (data) => {
 };
 
 //restituisce tutte le activity
-const getActivities = async () => { 
-        return await activityRepository.getActivities();
+const getActivities = async (userId, skip, limit) => { 
+    return await activityRepository.getActivities(userId, skip, limit);
 };
 
+const getActivitiesByCursor = async (userId, cursor, limit, direction) => {
+    return await activityRepository.getActivitiesByCursor(userId, cursor, limit, direction);
+  };
+
 //restituisce un activity
-const getActivity = async (id) => {
-   return await activityRepository.getActivity(id);
+const getActivity = async (activityId, userId) => {
+   return await activityRepository.getActivity(activityId, userId);
 };
 
 //modifica un activity 
-const updateActivity = async (id, data) => {
-    const activity = await activityRepository.updateActivity(id, data);
+const updateActivity = async (activityId, data, userId) => {
+    const activity = await activityRepository.updateActivity(activityId, data, userId);
     if(!activity) {
-        throw new NotFoundException(`Activity with id ${id} not found`, `activityRepository.updateActivity`);
+        throw new NotFoundException(`Activity with id ${activityId} not found`, `activityRepository.updateActivity`);
     }
     return activity;
 };
 
-//cancella un activity
-// const deleteActivity = async (id) => {
-//     return await activityRepository.deleteActivity(id);
-// };
-
-const deleteActivity = async (id) => {
-    return await activityRepository.updateActivity(id, {status: 'DELETED'});
+//modifica lo status della activity in deleted, soft delete
+const deleteActivity = async (activityId, userId) => {
+    return await activityRepository.updateActivity(activityId, {status: 'deleted'}, userId);
 };
 
-export default { addActivity, getActivities, getActivity, updateActivity, deleteActivity };
+export default { addActivity, getActivities, getActivity, updateActivity, deleteActivity, getActivitiesByCursor};
