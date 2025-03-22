@@ -6,16 +6,16 @@ const add = async(userId, token) => {
         {userId: userId}, 
         {registrationToken: token}, 
         {upsert: true}
-    ).catch((err) => {
-        console.log(err);
+    ).catch((error) => {
+        console.log(error);
         return null;
     });
         return result;
 }
 
 const get = async(token) => {
-    const result = await registrationTokenSchema.findOne({registrationToken: token}).catch((err) => {
-        throw new MongoInternalException(err, "tokenRepository.get");
+    const result = await registrationTokenSchema.findOne({registrationToken: token}).catch((error) => {
+        throw new MongoInternalException(error, "tokenRepository.get");
     })
         return result;
 }   

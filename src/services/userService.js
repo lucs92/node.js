@@ -9,7 +9,8 @@ import { userStatus } from '../const/constant.js';
 
 class UserService {
     constructor(){
-        this.emailGateway = EmailGatewayFactory.create(config.emailConfig.type);
+        const emailGateway = EmailGatewayFactory.create(config.emailConfig.type);
+        this.emailGateway = emailGateway;
     }
 async register(data){
     const { password, salt } = criptoUtils.hashPassword(data.password);
@@ -43,7 +44,7 @@ async login (email, password) {
     const {accessToken, refreshToken, userId} = criptoUtils.generateTokens(user);
     user.accessToken = accessToken;
     user.refreshToken = refreshToken;
-    return user;
+    return {user, accessToken, refreshToken};
 }
 }
 

@@ -3,9 +3,11 @@ import  config  from "../../config/config.js";
 import MailGateway from "./MailGateway.js";
 
 class BasicEmailGateway extends MailGateway {
+    #instance;
+
     constructor() {
         super();
-        this.transport = mailer.createTransport(config.emailConfig.basic);
+            this.transport = mailer.createTransport(config.emailConfig.basic);
     }
     async sendRegistrationEmail (email, token) {
         const confirmationLink = `http://localhost:8000/user/activate/${token}`;

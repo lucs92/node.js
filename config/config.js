@@ -12,7 +12,7 @@ const config = {
     host : "localhost",
     port : 8000,
     db: {
-        uri : `mongodb+srv://${dbUser}:${dbPassword}@todolist.e8z0m.mongodb.net/?retryWrites=true&w=majority&appName=${dbName}`,
+        url : `mongodb+srv://${dbUser}:${dbPassword}@todolist.e8z0m.mongodb.net/?retryWrites=true&w=majority&appName=${dbName}`,
         //port: 27017,
         //name: dbName
     },

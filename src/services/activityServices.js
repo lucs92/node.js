@@ -7,9 +7,13 @@ const addActivity = async (data) => {
 };
 
 //restituisce tutte le activity
-const getActivities = async (userId) => { 
-    return await activityRepository.getActivities(userId);
+const getActivities = async (userId, skip, limit) => { 
+    return await activityRepository.getActivities(userId, skip, limit);
 };
+
+const getActivitiesByCursor = async (userId, cursor, limit, direction) => {
+    return await activityRepository.getActivitiesByCursor(userId, cursor, limit, direction);
+  };
 
 //restituisce un activity
 const getActivity = async (activityId, userId) => {
@@ -30,4 +34,4 @@ const deleteActivity = async (activityId, userId) => {
     return await activityRepository.updateActivity(activityId, {status: 'deleted'}, userId);
 };
 
-export default { addActivity, getActivities, getActivity, updateActivity, deleteActivity};
+export default { addActivity, getActivities, getActivity, updateActivity, deleteActivity, getActivitiesByCursor};

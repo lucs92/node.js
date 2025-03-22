@@ -1,7 +1,7 @@
 export const status = {
     OPEN: "open",
     DELETED: "deleted",
-    DONE: "done"
+    COMPLETED: "comleted"
 };
 
 export const userStatus = {
