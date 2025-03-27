@@ -1,7 +1,7 @@
 import config from './config/config.js';
 import express, { json } from "express";
 import setup from './src/routes/activityRoutes.js';
-import connectDB from './src/gatawey/db.js';
+import connectDB from './src/gataway/db.js';
 
 const app = express();
 app.use(json());
@@ -18,3 +18,5 @@ catch (error) {
     console.error(`Error: ${error.message}`);
     process.exit(1);
 }
+
+export default app;

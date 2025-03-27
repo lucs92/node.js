@@ -1,37 +1,43 @@
 import activityRepository from "../repository/activityRepository.js";
-import NotFoundException from "../exceptions/NotFoundException.js";
+import { status } from "../const/constant.js";
+
+class ActivityServices{
 
 //scrive sul file una nuova activity
-const addActivity = async (data) => { 
+async addActivity (data) { 
     return await activityRepository.add(data);
 };
 
-//restituisce tutte le activity
-const getActivities = async (userId, skip, limit) => { 
+//restituisce tutte le activities di un utente
+async getActivities (userId, skip, limit) { 
     return await activityRepository.getActivities(userId, skip, limit);
 };
 
-const getActivitiesByCursor = async (userId, cursor, limit, direction) => {
+//restituisce tutte le activities con un cursore
+async getActivitiesByCursor (userId, cursor, limit, direction) {
     return await activityRepository.getActivitiesByCursor(userId, cursor, limit, direction);
   };
 
-//restituisce un activity
-const getActivity = async (activityId, userId) => {
+//restituisce un activity in base all'id
+async getActivity (activityId, userId) {
    return await activityRepository.getActivity(activityId, userId);
 };
 
 //modifica un activity 
-const updateActivity = async (activityId, data, userId) => {
+async updateActivity (activityId, data, userId) {
     const activity = await activityRepository.updateActivity(activityId, data, userId);
-    if(!activity) {
-        throw new NotFoundException(`Activity with id ${activityId} not found`, `activityRepository.updateActivity`);
-    }
     return activity;
 };
 
-//modifica lo status della activity in deleted, soft delete
-const deleteActivity = async (activityId, userId) => {
-    return await activityRepository.updateActivity(activityId, {status: 'deleted'}, userId);
+//modifica lo status della activity in deleted(soft delete)
+async deleteActivity (activityId, userId) {
+    return await activityRepository.updateActivity(activityId, {status: status.DELETED}, userId);
 };
 
-export default { addActivity, getActivities, getActivity, updateActivity, deleteActivity, getActivitiesByCursor};
+//modifica lo status della activity in completed
+async completeActivity (activityId, userId) {
+    return await activityRepository.completeActivity(activityId, userId);
+};
+}
+
+export default new ActivityServices();

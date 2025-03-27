@@ -1,7 +1,7 @@
 import userRepository from '../repository/userRepository.js';
 import criptoUtils from '../utils/criptoUtils.js';
 import tokenRepository from '../repository/tokenRepository.js';
-import EmailGatewayFactory from '../gatawey/EmailGatewayFactory.js';
+import EmailGatewayFactory from '../gataway/EmailGatewayFactory.js';
 import NotFoundException from '../exceptions/NotFoundException.js';
 import UnauthorizedException from '../exceptions/UnauthorizedException.js';
 import config from '../../config/config.js';
@@ -12,7 +12,7 @@ class UserService {
         const emailGateway = EmailGatewayFactory.create(config.emailConfig.type);
         this.emailGateway = emailGateway;
     }
-async register(data){
+async register (data){
     const { password, salt } = criptoUtils.hashPassword(data.password);
     data.password = password;
     data.salt = salt;
@@ -45,7 +45,7 @@ async login (email, password) {
     user.accessToken = accessToken;
     user.refreshToken = refreshToken;
     return {user, accessToken, refreshToken};
-}
+};
 }
 
 export default new UserService();
