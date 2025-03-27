@@ -11,7 +11,7 @@ class Activity {
         this.#description = activity.description;
         this.#dueDate = activity.dueDate;
         this.#status = activity.status;
-        this.#id = activity._id.toString();
+        this.#id = activity._id;
         this.#userId = activity.userId;
     }
 

@@ -4,28 +4,30 @@ import MongoInternalException from '../exceptions/MongoInternalException.js';
 import NotFoundException from '../exceptions/NotFoundException.js';
 import { status } from '../const/constant.js';
 
-const add = async (data)=> {
-    const activity  = await activitySchema.create(data)
+class ActivityRepository {
+    
+async add (data) {
+    const activity  = await activitySchema.create(data)  
     .catch(error => {
-        throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.add`);
+        throw new MongoInternalException(`Error on adding new activity`, `activityRepository.add`);
     });
-       return new Activity(activity);
+        return new Activity(activity);
 };
 
-const getActivities = async (userId, skip, limit) => {
+async getActivities (userId, skip, limit) {
     const activities = await activitySchema.find({userId}).skip(skip).limit(limit)
     .catch(error => {
-        throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.getActivities`);
+        throw new MongoInternalException(`Error on getting activities`, `activityRepository.getActivities`);
     });
         if(activities.length === 0) {
-        throw new NotFoundException(`Activity with id ${userId} not found`, `activityRepository.getActivities`);
+        throw new NotFoundException(`Activities not found`, `activityRepository.getActivities`);
     };
-    return activities.map((activities) => new Activity(activities));
+        return activities.map((activities) => new Activity(activities));
 };
 
-const getActivitiesByCursor = async (userId, limit, cursor, direction) => {
+async getActivitiesByCursor (userId, limit, cursor, direction) {
     if (typeof cursor !== 'string' || cursor.length !== 24) {
-      throw new Error('Cursor not valid.');
+        throw new Error('Cursor not valid.');
     }
     const parsedLimit = parseInt(limit, 10) || 10;
     const filter = { userId, status: { $ne: 'Deleted' } };
@@ -33,49 +35,59 @@ const getActivitiesByCursor = async (userId, limit, cursor, direction) => {
     let cursorQuery = {};
   
     if (cursor) {
-      cursorQuery = {
+        cursorQuery = {
          _id: direction === 'next' ? { $gt: cursor } : { $lt: cursor },
-      };
+        };
     }
   
     const query = { ...filter, ...cursorQuery };
   
     const activitiesResult = await activitySchema.find(query).limit(parsedLimit)
-      .catch((error) => {
-        throw new MongoInternalException(`Error: ${error.message}`,'activityRepository.getActivitiesByCursor');
-      });
+    .catch(error => {
+        throw new MongoInternalException(`Error on getting acivities by cursor`,'activityRepository.getActivitiesByCursor');
+    });
+    if (!activitiesResult) {
+        throw new NotFoundException('Activity not found', 'activityRepository.getActivityByCursor');
+      }
         return activitiesResult;
   };
 
-const getActivity = async (activityId, userId) => {
+async getActivity (activityId, userId) {
     const activity = await activitySchema.findOne({_id: activityId, userId: userId })
     .catch(error => {
-        throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.getActivity`);
+        throw new MongoInternalException(`Error on getting activity`, `activityRepository.getActivity`);
     });
     if(!activity) {
-        throw new NotFoundException(`Activity with id ${activityId} not found`, `activityRepository.getActivity`);
+        throw new NotFoundException(`Activity not found`, `activityRepository.getActivity`);
     };
-    return new Activity(activity);
-};
-
-const updateActivity = async (activityId, data, userId) => {
-    const activity = await activitySchema.findByIdAndUpdate(
-    {_id: activityId, userId: userId}, data, {upsert: false, new: true})
-    .catch(error => {
-        throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.updateActivity`);
-    });
         return new Activity(activity);
 };
 
-const completeActivity = async (activityId, userId) => {
+async updateActivity (activityId, data, userId) {
+    const activity = await activitySchema.findByIdAndUpdate(
+        {_id: activityId, userId: userId}, data, {new: true})
+    .catch(error => {
+        throw new MongoInternalException(`Error on updating activity`, `activityRepository.updateActivity`)
+    });
+    if (!activity) {
+        throw new NotFoundException('Activity not found', 'activityRepository.updateActivity');
+      };
+        return new Activity(activity);     
+};
+
+async completeActivity (activityId, userId) {
     const activity = await activitySchema.findByIdAndUpdate(
         {_id: activityId, userId: userId, status:{$in: [status.OPEN, status.COMPLETED]}}, 
         {$set: {status: status.COMPLETED}}, 
-        {upsert: false, new: true})
-        .catch(error => {
-            throw new MongoInternalException(`Error: ${error.message}`, `activityRepository.completeActivity`);
-        });
-            return new Activity(activity);
+        {new: true})  
+    .catch(error => {
+            throw new MongoInternalException(`Error on completing activity`, `activityRepository.completeActivity`);
+    });
+    if (!activity) {
+        throw new NotFoundException('Activity not found', 'activityRepository.completeActivity');
+      };
+        return new Activity(activity);          
 };
+}
 
-export default {add, getActivities, getActivity, updateActivity, getActivitiesByCursor, completeActivity};
+export default new ActivityRepository();

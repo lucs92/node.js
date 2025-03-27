@@ -9,9 +9,4 @@ export default [
             "token": Joi.string().length(10).required(),
         }),
     ),
-    // validator.headers(
-    //     Joi.object().keys({
-    //         "content-type": Joi.string().valid('application/json').required(),
-    //     }).unknown(),
-    // )
 ]

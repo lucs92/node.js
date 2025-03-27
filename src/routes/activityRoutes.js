@@ -15,19 +15,22 @@ import loginValidator from '../validators/loginUserValidator.js'
 import loginController from '../controllers/loginController.js'
 import authMiddleware from '../middleware/authMiddleware.js';
 import cursorValidator from '../validators/cursorValidator.js';
+import completeController from '../controllers/completeController.js';
+import completeValidator from '../validators/completeValidator.js';
 
 const setup = (app) => {
 
-    app.get("/", authMiddleware, getMany); 
+    app.get("/:id/activities", authMiddleware, getMany); 
     app.get('/:id',authMiddleware, getValidator, getController);
-    app.get('/activities', authMiddleware, cursorValidator, getActivitiesByCursor);
+    app.get('/:id/cursor/activities', authMiddleware, cursorValidator, getActivitiesByCursor);
     app.get('/user/activate/:token', activateValidator, activateController);
 
     app.post("/",authMiddleware, addValidator, addController);
     app.post("/user",registerUserValidator , registerController);
     app.post("/user/login", loginValidator, loginController);
 
-    app.patch("/:id",authMiddleware, updateValidator, updateController);
+    app.patch("/:id/complete",authMiddleware, completeValidator, completeController );
+    app.patch("/:id/update",authMiddleware, updateValidator, updateController);
 
     app.delete("/soft/:id",authMiddleware, deleteValidator , deleteSoftController);
 

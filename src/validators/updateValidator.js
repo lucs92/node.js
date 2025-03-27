@@ -6,8 +6,8 @@ const validator = createValidator({ passError: true });
 export default [
     validator.body(
         Joi.object().keys({
-            name: Joi.string().optional(),
-            description: Joi.string().optional(),
+            name: Joi.string().optional().min(3),
+            description: Joi.string().optional().min(3),
             dueDate: Joi.number().min(new Date().getTime()).optional(),
         })
     ),
